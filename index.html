@@ -6,111 +6,292 @@
     <title>Ar-T - The Future of Creativity</title>
     <style>
         :root {
-        --bs-Oxford: #00072d;
-        --bs-Penn: #001C55;
-        --bs-Munsel: #2292A4;
-        --bs-Mint: #D0F4EA;
-        --bs-White: #fffeff;
-        }
-        body {
-            font-family: Arial, sans-serif;
-            margin: 100 100 100 0;
-            padding: 0 0 100px 0;
-            background: linear-gradient(180deg, var(--bs-Munsel), var(--bs-Oxford));
+            --bs-Oxford: #00072d;
+            --bs-Penn: #001C55;
+            --bs-Munsel: #2292A4;
+            --bs-Mint: #D0F4EA;
+            --bs-White: #fffeff;
+            --bs-lightGray: #f3f4f6;
+            --bs-darkGray: #333;
+            --glass-opacity: 0.2; /* For glass effect */
         }
 
-        .top-bar {
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(180deg, var(--bs-Munsel), var(--bs-Oxford));
+            color: var(--bs-White);
+            overflow-x: hidden;
+        }
+
+        /* Navbar styles */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: var(--bs-Penn);
+            color: var(--bs-White);
+            z-index: 1000;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px 20px;
+            padding: 20px 40px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            transition: background 0.3s ease;
         }
 
-        .top-bar .logo {
-            font-size: 1.5em;
-            font-weight: bold;
+        .navbar .logo {
+            height: 40px;
+            object-fit: contain;
         }
 
-        .top-bar nav a {
+        .navbar nav {
+            display: flex;
+            gap: 25px;
+        }
+
+        .navbar nav a {
+            color: var(--bs-White);
             text-decoration: none;
-            margin: 0 10px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            transition: color 0.3s ease, transform 0.3s ease;
+            padding: 8px 12px;
+            border-radius: 5px;
         }
 
-        .top-bar nav a:hover {
+        .navbar nav a:hover,
+        .navbar nav a:focus {
+            color: var(--bs-Mint);
+            transform: scale(1.1);
         }
 
-        .top-bar .social-media img {
-            width: 24px;
-            height: 24px;
-            margin-left: 10px;
+        /* Social media icons in the navbar */
+        .navbar .social-media {
+            display: flex;
+            gap: 15px;
         }
 
+        .navbar .social-media img {
+            width: 28px;
+            height: 28px;
+            object-fit: contain;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        .navbar .social-media img:hover,
+        .navbar .social-media img:focus {
+            transform: scale(1.2);
+            opacity: 0.8;
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 15px 20px;
+            }
+
+            .navbar nav {
+                width: 100%;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+                margin-top: 15px;
+            }
+
+            .navbar nav a {
+                font-size: 1.2rem;
+                padding: 10px 0;
+                width: 100%;
+                text-align: left;
+            }
+
+            .navbar .social-media {
+                margin-top: 15px;
+            }
+
+            .navbar .social-media img {
+                width: 30px;
+                height: 30px;
+            }
+        }
+
+        /* A simple hover effect for the navbar background */
+        .navbar:hover {
+            background: var(--bs-Oxford);
+        }
+
+        /* Hero Section */
         .hero {
             text-align: center;
-            padding: 50px 20px;
+            padding: 100px 20px 60px;
+            position: relative;
+            min-height: 50vh;
         }
 
         .hero video {
-            max-width: 100%;
+            max-width: 90%;
             height: auto;
+            border-radius: 10px;
+            margin-bottom: 20px;
         }
 
-        .hero h1 {
-            font-size: 3em;
-            margin: 20px 0 10px;
+        .scroll-down {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
         }
 
-        .hero h2 {
-            font-size: 1.5em;
+        .scroll-down svg {
+            width: 30px;
+            height: 30px;
+            animation: bounce 2s infinite;
         }
 
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(10px);
+            }
+        }
+
+        /* General Section Styling */
         .section {
+            padding: 80px 20px; /* Increased padding */
+            min-height: 50vh; /* At least the vertical screen height */
+        }
+
+        .section h2 {
+            color: var(--bs-Mint);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .main {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 20px 50px;
+            overflow: auto;
+        }
+
+        .text-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            max-width: 700px;
+        }
+
+        .main h1 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 5rem;
+            margin: 0;
+            font-weight: 500;
+        }
+
+        .main h2 {
+            font-size: 2rem;
+            margin: 0 0 1.5rem 0;
+            font-weight: 300;
+        }
+
+        .main p {
+            font-size: 1.38rem;
+            color: #0099cc;
+            margin: 0;
+            line-height: 1.5;
+            text-align: justify;
+        }
+
+        /* Glass effect for problem images */
+        .glassified {
+            background: rgba(255, 255, 255, var(--glass-opacity));
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 15px;
+            margin: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Carousel for problems */
+        .carousel {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            scrollbar-width: none;
+        }
+
+        .carousel::-webkit-scrollbar {
+            display: none;
+        }
+
+        .carousel-item {
+            flex: 0 0 auto;
+            background-color: var(--bs-White);
+            color: var(--bs-Oxford);
+            width: 250px;
+            padding: 20px;
+            border-radius: 10px;
+            scroll-snap-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .carousel-item img {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+
+        /* Support Headset Section */
+        .support-headset {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            overflow-x: auto;
+            padding: 40px 20px;
+            min-height: 50vh;
+        }
+
+        .support-headset img {
+            width: 200px;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        /* Updates Section */
+        .updates {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
             padding: 40px 20px;
         }
 
-        .problems, .updates-slider {
-            display: flex;
-            gap: 20px;
-            overflow-x: auto;
-        }
-
-        .problem-page, .update-page {
-            flex: 0 0 auto;
+        .update-box {
+            background-color: var(--bs-White);
+            color: var(--bs-Oxford);
             padding: 20px;
-            border-radius: 5px;
-            width: 300px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-        .problem-page img, .update-page img {
-            width: 100%;
-            height: auto;
+        .update-box h3 {
+            margin: 0;
+            color: var(--bs-Mint);
         }
 
-        .solutions {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .solution-text {
-            flex: 1;
-        }
-
-        .solution-video video {
-            max-width: 100%;
-            height: auto;
-        }
-
-        .device-carousel {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-        }
-
-        .device-carousel img {
-            width: 100px;
-            height: auto;
-            border-radius: 5px;
+        .update-box p {
+            margin: 5px 0;
+            font-size: 1.1rem;
         }
 
         .sticky-footer {
@@ -118,31 +299,28 @@
             bottom: 0;
             left: 0;
             right: 0;
+            background-color: var(--bs-Penn);
             text-align: center;
             padding: 10px;
+            color: var(--bs-White);
+            font-size: 0.9em;
         }
 
-        .updates-slider ul {
-            padding-left: 20px;
-        }
-
-        h2 {
-            color: #001c55;
-        }
-
-        a {
+        .sticky-footer a {
+            color: var(--bs-Mint);
             text-decoration: none;
+            font-weight: bold;
         }
 
-        a:hover {
+        .sticky-footer a:hover {
             text-decoration: underline;
         }
     </style>
 </head>
 <body>
-    <!-- Top Bar -->
-    <div class="top-bar">
-        <div class="logo">Ar-T</div>
+    <!-- Navbar -->
+    <div class="navbar">
+        <img src="logo.png" alt="Logo" class="logo">
         <nav>
             <a href="#problems">Problems</a>
             <a href="#solutions">Solutions</a>
@@ -151,52 +329,60 @@
         </nav>
         <div class="social-media">
             <a href="https://www.youtube.com/@Startup-developer" target="_blank">
-              <img src="youtube-logo.png" alt="YouTube">
+                <img src="youtube-logo.png" alt="YouTube Logo">
             </a>
             <a href="https://www.tiktok.com/@theart.hub" target="_blank">
-              <img src="Tiktok-logo.png" alt="Tiktok">
+                <img src="tiktok-logo.png" alt="TikTok Logo">
             </a>
-          </div>          
+            <a href="https://www.tiktok.com/@theart.hub" target="_blank">
+                <img src="tiktok-logo.png" alt="TikTok Logo">
+            </a>
+        </div>
     </div>
 
-    <!-- Hero Section -->
-    <div class="hero">
+     <!-- Hero Section -->
+     <div class="hero">
         <video autoplay muted>
-            <source src="hero-video.mp4" type="video/mp4">
+            <source src="0001-0055.mov" type="video/mp4">
             Your browser does not support the video tag.
         </video>
-        <h1>Ar-T</h1>
-        <h2>The Future of Creativity</h2>
+        <div class="scroll-down">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 15.172l4.95-4.95a.75.75 0 011.06 1.06l-5.5 5.5a.75.75 0 01-1.06 0l-5.5-5.5a.75.75 0 011.06-1.06L12 15.172z" />
+            </svg>
+        </div>
     </div>
 
-    <!-- Current Problems Section -->
+
+    <!-- Problems Section -->
     <div id="problems" class="section">
         <h2>Current Problems</h2>
-        <div class="problems">
-            <div class="problem-page">
-                <h3>Problem 1</h3>
-                <p>Description of Problem 1</p>
+        <div class="carousel">
+            <div class="carousel-item glassified">
                 <img src="problem1.jpg" alt="Problem 1 Image">
+                <h3>Problem 1</h3>
+                <p>This is a description of the first problem we are addressing.</p>
             </div>
-            <div class="problem-page">
-                <h3>Problem 2</h3>
-                <p>Description of Problem 2</p>
+            <div class="carousel-item glassified">
                 <img src="problem2.jpg" alt="Problem 2 Image">
+                <h3>Problem 2</h3>
+                <p>This is a description of the second problem we are addressing.</p>
             </div>
-            <div class="problem-page">
-                <h3>Problem 3</h3>
-                <p>Description of Problem 3</p>
+            <div class="carousel-item glassified">
                 <img src="problem3.jpg" alt="Problem 3 Image">
+                <h3>Problem 3</h3>
+                <p>This is a description of the third problem we are addressing.</p>
             </div>
         </div>
     </div>
 
-    <!-- How We Solve Them Section -->
+    <!-- Solutions Section -->
     <div id="solutions" class="section">
         <h2>How We Solve Them</h2>
-        <div class="solutions">
+        <div class="solution-section">
             <div class="solution-text">
-                <p>Explanation of how the problems are solved using layered AI tools and techniques.</p>
+                <h3>Our Solution</h3>
+                <p>We use advanced AI tools and techniques to tackle the identified problems, ensuring efficiency and effectiveness.</p>
             </div>
             <div class="solution-video">
                 <video autoplay loop muted>
@@ -207,54 +393,33 @@
         </div>
     </div>
 
-    <!-- Supported Devices Section -->
-    <div id="devices" class="section">
-        <h2>Supported Devices</h2>
-        <div class="device-carousel">
-            <img src="device1.png" alt="Device 1">
-            <img src="device2.png" alt="Device 2">
-            <img src="device3.png" alt="Device 3">
-            <img src="device4.png" alt="Device 4">
+    <!-- Support Headset Section -->
+    <div class="support-headset">
+        <img src="headset1.png" alt="Headset 1">
+        <img src="headset2.png" alt="Headset 2">
+        <img src="headset3.png" alt="Headset 3">
+        <img src="headset4.png" alt="Headset 4">
+    </div>
+
+    <!-- Updates Section -->
+    <div id="updates" class="updates">
+        <div class="update-box">
+            <h3>Update 1 - Date: 2024-12-01</h3>
+            <p>Details about the first update and improvements made.</p>
+        </div>
+        <div class="update-box">
+            <h3>Update 2 - Date: 2024-12-05</h3>
+            <p>Details about the second update with new features added.</p>
+        </div>
+        <div class="update-box">
+            <h3>Update 3 - Date: 2024-12-10</h3>
+            <p>Information regarding fixes and bug resolutions from the latest patch.</p>
         </div>
     </div>
 
-    <!-- Recent Updates Section -->
-    <div id="updates" class="section">
-        <h2>Recent Updates</h2>
-        <div class="updates-slider">
-            <div class="update-page">
-                <h3>Update 1</h3>
-                <p>Date: 2023-12-01</p>
-                <ul>
-                    <li>Improvement 1</li>
-                    <li>Improvement 2</li>
-                    <li>Improvement 3</li>
-                </ul>
-            </div>
-            <div class="update-page">
-                <h3>Update 2</h3>
-                <p>Date: 2024-01-15</p>
-                <ul>
-                    <li>Improvement A</li>
-                    <li>Improvement B</li>
-                    <li>Improvement C</li>
-                </ul>
-            </div>
-            <div class="update-page">
-                <h3>Update 3</h3>
-                <p>Date: 2024-03-10</p>
-                <ul>
-                    <li>Enhancement X</li>
-                    <li>Enhancement Y</li>
-                    <li>Enhancement Z</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-
-    <!-- Sticky Footer -->
+    <!-- Footer -->
     <div class="sticky-footer">
-        <p>Open to Suggestions: Email us at feedback@ar-t.com</p>
+        <p>&copy; 2024 <a href="#">Ar-T</a>. All rights reserved.</p>
     </div>
 </body>
 </html>
