@@ -41,27 +41,31 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px 5%;
+            padding: 10px 40px; /* Changed from 5% to fixed pixels for consistent spacing */
             background: rgba(0, 7, 45, 0.8);
             backdrop-filter: blur(10px);
             box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             position: fixed;
-            width: 100%;
+            width: calc(100% - 80px); /* Adjusted to account for padding */
             top: 0;
             z-index: 1000;
         }
 
         .navbar .logo {
             height: 40px;
+            margin-right: auto; /* Push logo to the left */
         }
 
         .navbar ul {
             list-style: none;
             display: flex;
-            gap: 20px;
+            gap: 30px; /* Increased gap for better spacing */
             margin: 0;
             padding: 0;
+            position: absolute; /* Added to center the menu */
+            left: 50%;
+            transform: translateX(-50%); /* Center the menu */
         }
 
         .navbar ul li {
@@ -93,72 +97,91 @@
 
         .navbar .social-media {
             display: flex;
-            gap: 10px;
+            gap: 15px;
+            margin-left: 20px; /* Add space between menu and social icons */
         }
 
         .navbar .social-media img {
             height: 30px;
             transition: transform 0.3s ease;
-            filter: brightness(0) invert(1);
         }
 
         .navbar .social-media img:hover {
-            transform: scale(1.2) rotate(360deg);
+            transform: scale(1.1); /* Reduced scale effect */
         }
 
         .hero {
             text-align: center;
-            padding: 100px 0 60px;
+            padding: 0;
             position: relative;
-            min-height: 50vh;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             color: var(--bs-White);
+            overflow: hidden;
         }
 
         .hero video {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
-            height: auto;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
         }
 
-        .hero h1 {
-            font-size: 4rem;
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            padding: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .hero-content h1 {
+            font-size: clamp(3rem, 10vw, 6rem);
             margin: 0;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            letter-spacing: 2px;
+            font-weight: 800;
             animation: fadeInDown 1s ease;
         }
 
-        .hero h2 {
-            font-size: 2rem;
-            margin: 10px 0;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        .hero-content h2 {
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            margin: 20px 0;
+            font-weight: 400;
+            opacity: 0.9;
             animation: fadeInUp 1s ease;
         }
 
         .scroll-down {
             position: absolute;
-            bottom: 20px;
+            bottom: 40px;
             left: 50%;
             transform: translateX(-50%);
+            z-index: 2;
         }
 
         .scroll-down svg {
-            width: 30px;
-            height: 30px;
+            width: clamp(30px, 4vw, 40px);
+            height: auto;
             animation: bounce 2s infinite;
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
+            opacity: 0.9;
         }
 
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% {
-                transform: translateY(0);
+        @media (max-width: 768px) {
+            .hero-content {
+                padding: 20px 15px;
             }
-            40% {
-                transform: translateY(-20px);
-            }
-            60% {
-                transform: translateY(-10px);
+
+            .scroll-down {
+                bottom: 20px;
             }
         }
 
@@ -183,7 +206,7 @@
 
         .problem {
             display: flex;
-            justify-content: flex-start; /* Changed from center to flex-start */
+            justify-content: center; /* Center problems on PC */
             align-items: center;
             gap: 40px;
             overflow-x: scroll; /* Changed from auto to scroll */
@@ -313,23 +336,24 @@
 
         .devices-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 60px;
+            grid-template-columns: repeat(4, 1fr); /* Adjust to fit all devices in one row */
+            gap: 30px; /* Reduce gap for better spacing */
             max-width: 1200px;
             width: 100%;
             margin-bottom: 60px;
         }
 
         .device-card {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 40px;
+            padding: 20px; /* Reduce padding */
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
             border-radius: 20px;
             transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Center content horizontally */
+            justify-content: center; /* Center content vertically */
         }
 
         .device-card:hover {
@@ -339,10 +363,13 @@
         }
 
         .device-card img {
-            width: 80%;
+            width: 70%; /* Reduce image size */
             height: auto;
-            margin-bottom: 20px;
+            margin-bottom: 15px; /* Reduce margin */
             transition: transform 0.5s ease;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .device-card:hover img {
@@ -391,11 +418,12 @@
                 padding-right: 20px;
                 justify-content: flex-start;
                 scroll-padding: 20px; /* Added to improve snap points */
+                gap: 20px; /* Reduce gap for better spacing on mobile */
             }
 
             .problem div {
                 flex: 0 0 80%; /* Make cards take up 80% of the viewport width on mobile */
-                margin-right: 20px; /* Add space between cards */
+                margin-right: 10px; /* Reduce space between cards */
             }
 
             .problem div:last-child {
@@ -421,13 +449,17 @@
             }
 
             .devices-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns: 1fr; /* Stack devices vertically on mobile */
                 gap: 30px;
                 padding: 0 20px;
             }
 
             .device-card {
                 padding: 30px;
+            }
+
+            .device-card img {
+                width: 80%; /* Adjust image size for mobile */
             }
 
             .device-card h3 {
@@ -452,23 +484,47 @@
             .device-carousel img:nth-child(4) { transform: translate(-50%, -50%) rotateY(270deg) translateZ(200px); }
 
             .navbar {
-                padding: 10px 3%;
+                padding: 10px 20px;
+                width: calc(100% - 40px); /* Full width minus padding */
+                left: 0;
             }
 
             .navbar ul {
                 display: none;
-                position: absolute;
-                top: 60px;
-                left: 0;
+                position: fixed; /* Changed from absolute */
+                top: 0; /* Changed from 60px to 50% */
+                left: 50%;
+                transform: translateX(-50%);
                 width: 100%;
+                height: 100vh; /* Full height of the viewport */
                 background: rgba(0, 7, 45, 0.95);
                 flex-direction: column;
+                justify-content: center; /* Center vertically */
                 align-items: center;
-                padding: 20px 0;
+                padding: 20px;
+                margin: 0;
+                z-index: 999;
+                border-radius: 0; /* Remove border-radius */
             }
 
             .navbar ul.active {
                 display: flex;
+            }
+
+            .navbar ul li {
+                margin: 15px 0;
+            }
+
+            .navbar ul li a {
+                font-size: 1.2rem; /* Larger text for better touch targets */
+            }
+
+            .navbar .logo {
+                height: 35px; /* Slightly smaller logo on mobile */
+            }
+
+            .navbar .social-media img {
+                height: 25px; /* Slightly smaller social icons on mobile */
             }
 
             .menu-toggle {
@@ -476,6 +532,28 @@
                 font-size: 24px;
                 color: var(--bs-White);
                 cursor: pointer;
+                padding: 5px;
+                margin-left: 15px;
+            }
+
+            .close-menu {
+                display: none;
+                font-size: 24px;
+                color: var(--bs-White);
+                cursor: pointer;
+                position: absolute;
+                top: 20px;
+                right: 20px;
+            }
+
+            .navbar ul.active + .close-menu {
+                display: block;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .menu-toggle, .close-menu {
+                display: none;
             }
         }
 
@@ -518,6 +596,67 @@
             from { opacity: 0; }
             to { opacity: 1; }
         }
+
+        .updates {
+            padding: 80px 20px;
+            background: rgba(0, 7, 45, 0.8);
+            color: var(--bs-White);
+            text-align: center;
+        }
+
+        .updates h2 {
+            font-size: 2.5rem;
+            margin-bottom: 40px;
+        }
+
+        .update-box {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .update-box:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .update-box h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .update-box p {
+            font-size: 1rem;
+            margin: 0;
+        }
+
+        @media (max-width: 768px) {
+            .updates {
+                padding: 40px 20px;
+            }
+
+            .updates h2 {
+                font-size: 2rem;
+                margin-bottom: 30px;
+            }
+
+            .update-box {
+                padding: 15px;
+            }
+
+            .update-box h3 {
+                font-size: 1.2rem;
+            }
+
+            .update-box p {
+                font-size: 0.9rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -531,10 +670,11 @@
             <li><a href="#updates">Updates</a></li>
         </ul>
         <div class="social-media">
-            <a href="#"><img src="tiktok-logo.png" alt="TikTok"></a>
-            <a href="#"><img src="youtube-logo.png" alt="YouTube"></a>
+            <a href="https://www.tiktok.com/@theart.hub" target="_blank"><img src="tiktok-logo.png" alt="TikTok"></a>
+            <a href="https://www.youtube.com/@Startup-developer" target="_blank"><img src="youtube-logo.png" alt="YouTube"></a>
         </div>
         <div class="menu-toggle">☰</div>
+        <div class="close-menu">✖</div>
     </div>
     <div id="hero" class="hero">
         <video autoplay muted loop>
@@ -603,7 +743,7 @@
                 <h3>Meta Quest Pro</h3>
             </div>
         </div>
-        <a href="https://sidequestvr.com/download" class="download-button">Download Now</a>
+        <a href="https://sidequestvr.com/app/37779/ar-t" class="download-button" target="_blank">Download Now</a>
     </div>
     <div id="updates" class="updates">
         <h2>Updates</h2>
@@ -620,6 +760,32 @@
             <p>First Release of AR-T</p>
         </div>
     </div>
+    <footer style="padding: 20px; 
+                   background: rgba(0, 7, 45, 0.9); 
+                   color: var(--bs-White); 
+                   text-align: center;
+                   position: relative;
+                   z-index: 10;
+                   width: 100%;
+                   box-sizing: border-box;
+                   margin-top: 40px;">
+        <p style="margin: 10px 0;">
+            <a href="https://sidequestvr.com/app/37779/ar-t" target="_blank" 
+               style="color: var(--bs-Mint); 
+                      text-decoration: none; 
+                      font-weight: bold;">
+                Try the app and leave a review!
+            </a>
+        </p>
+        <p style="margin: 10px 0;">
+            We are open to suggestions. Email us at 
+            <a href="mailto:arteapp.info@gmail.com" 
+               style="color: var(--bs-Mint); 
+                      text-decoration: none;">
+                arteapp.info@gmail.com
+            </a>
+        </p>
+    </footer>
     <script>
         // Intersection Observer for section animations
         const observer = new IntersectionObserver((entries) => {
@@ -641,6 +807,8 @@
                 document.querySelector(this.getAttribute('href')).scrollIntoView({
                     behavior: 'smooth'
                 });
+                // Close the menu after clicking a link
+                navMenu.classList.remove('active');
             });
         });
 
@@ -664,10 +832,15 @@
 
         // Mobile menu toggle
         const menuToggle = document.querySelector('.menu-toggle');
+        const closeMenu = document.querySelector('.close-menu');
         const navMenu = document.querySelector('.navbar ul');
 
         menuToggle.addEventListener('click', () => {
             navMenu.classList.toggle('active');
+        });
+
+        closeMenu.addEventListener('click', () => {
+            navMenu.classList.remove('active');
         });
 
         // Close menu when clicking outside
