@@ -8,33 +8,78 @@
 
     <style>
         :root {
-            --bs-Oxford: #00072d;
-            --bs-Penn: #001C55;
-            --bs-Munsel: #2292A4;
-            --bs-Mint: #D0F4EA;
-            --bs-White: #fffeff;
+            --bs-Dark: #0A1128;
+            --bs-Navy: #001F54;
+            --bs-Blue: #034078;
+            --bs-Accent: #1282A2;
+            --bs-White: #FEFCFB;
         }
 
         body {
             font-family: 'Poppins', Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background: linear-gradient(
-                135deg,
-                var(--bs-Oxford) 0%,
-                var(--bs-Penn) 25%,
-                var(--bs-Munsel) 50%,
-                var(--bs-Mint) 75%,
-                var(--bs-White) 100%
-            );
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
+            background: linear-gradient(180deg, 
+                var(--bs-Dark) 0%,
+                var(--bs-Navy) 100%);
+            background-attachment: fixed;
+            color: var(--bs-White);
         }
 
+        /* Update background colors for various components */
+        .navbar {
+            background: rgba(10, 17, 40, 0.95);
+        }
+
+        .problem div {
+            background: rgba(254, 252, 251, 0.95);
+            border: none;
+        }
+
+        .device-card {
+            background: rgba(254, 252, 251, 0.1);
+        }
+
+        .update-box {
+            background: rgba(254, 252, 251, 0.1);
+        }
+
+        .download-button {
+            background: var(--bs-Accent);
+            color: var(--bs-White);
+        }
+
+        .download-button:hover {
+            background: var(--bs-Blue);
+        }
+
+        footer {
+            background: var(--bs-Dark) !important;
+        }
+
+        /* Remove any existing gradientBG animation */
         @keyframes gradientBG {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
+        }
+
+        /* Update link colors for better contrast */
+        a {
+            color: var(--bs-Accent);
+        }
+
+        a:hover {
+            color: var(--bs-White);
+        }
+
+        /* Ensure text contrast in problem cards */
+        .problem div {
+            color: var(--bs-Dark);
+        }
+
+        .problem h3 {
+            color: var(--bs-Navy);
         }
 
         .navbar {
@@ -42,7 +87,6 @@
             justify-content: space-between;
             align-items: center;
             padding: 10px 40px; /* Changed from 5% to fixed pixels for consistent spacing */
-            background: rgba(0, 7, 45, 0.8);
             backdrop-filter: blur(10px);
             box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -205,71 +249,283 @@
         }
 
         .problem {
-            display: flex;
-            justify-content: center; /* Center problems on PC */
-            align-items: center;
-            gap: 40px;
-            overflow-x: scroll; /* Changed from auto to scroll */
-            scroll-snap-type: x mandatory;
-            scrollbar-width: none;
-            padding: 40px;
-            -webkit-overflow-scrolling: touch; /* Added for smooth scrolling on iOS */
-            scroll-behavior: smooth; /* Added for smooth scrolling */
-            /* Add padding to ensure first and last items are reachable */
-            padding-left: calc(50% - 150px);
-            padding-right: calc(50% - 150px);
-        }
-
-        .problem::-webkit-scrollbar {
-            display: none; /* Hide scrollbar for Chrome/Safari */
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, minmax(250px, 300px));
+            gap: 25px;
+            padding: 40px 20px;
+            justify-content: center;
         }
 
         .problem div {
-            flex: 0 0 auto;
-            color: var(--bs-Oxford);
-            width: 300px;
+            background: rgba(254, 252, 251, 0.95);
             padding: 20px;
             border-radius: 15px;
-            scroll-snap-align: center;
-            background: rgba(255, 255, 255, 0.15);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            backdrop-filter: blur(10px);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            min-height: 500px;
+            transition: all 0.4s ease, z-index 0s;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
+            gap: 12px;
+            height: 100%;
+            width: 100%;
+            min-height: auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Pastel backgrounds for each problem card */
+        .problem div:nth-child(1) {
+            background: linear-gradient(to bottom right, #E8F3F1, #FFFFFF);
+            border-left: 4px solid #98D8D6;
+        }
+
+        .problem div:nth-child(2) {
+            background: linear-gradient(to bottom right, #F3E8F0, #FFFFFF);
+            border-left: 4px solid #D8B4D6;
+        }
+
+        .problem div:nth-child(3) {
+            background: linear-gradient(to bottom right, #E8EAF3, #FFFFFF);
+            border-left: 4px solid #B4C2D6;
         }
 
         .problem div:hover {
             transform: translateY(-15px) scale(1.05);
             box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
-            background: rgba(255, 255, 255, 0.25);
+            z-index: 2;
         }
 
-        .problem img {
-            width: 100%;
-            height: 200px;
-            border-radius: 10px;
-            margin-bottom: 15px;
-            transition: transform 0.4s ease;
-            object-fit: cover;
-        }
-
-        .problem div:hover img {
-            transform: scale(1.1);
-        }
-
+        /* Update text colors for better contrast with pastel backgrounds */
         .problem h3 {
-            margin: 0 0 10px;
-            color: var(--bs-Munsel);
+            color: var(--bs-Navy);
+            font-weight: 600;
         }
 
         .problem p {
-            margin: 0;
-            font-size: 1rem;
-            line-height: 1.5;
+            color: #2A2A2A;
+        }
+
+        /* Tablet Styles */
+        @media (min-width: 768px) and (max-width: 1024px) {
+            .problem {
+                grid-template-columns: repeat(2, minmax(220px, 280px));
+                padding: 30px 20px;
+                gap: 20px;
+            }
+
+            .problem div:last-child {
+                grid-column: span 2;
+                max-width: 280px;
+                justify-self: center;
+            }
+
+            .problem img {
+                height: 180px;
+            }
+        }
+
+        /* Mobile Styles */
+        @media (max-width: 767px) {
+            .problem {
+                grid-template-columns: minmax(250px, 300px);
+                padding: 20px;
+                gap: 15px;
+                max-width: 600px;
+                margin: 0 auto;
+            }
+
+            .problem div {
+                background: rgba(254, 252, 251, 0.95);
+                padding: 20px;
+                border-radius: 15px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
+                opacity: 1;
+                transform: none;
+                height: auto;
+            }
+
+            .problem img {
+                display: none; /* Hide images on mobile */
+            }
+
+            .problem h3 {
+                font-size: 1.3rem;
+                color: var(--bs-Navy);
+                margin-bottom: 10px;
+            }
+
+            .problem p {
+                font-size: 1rem;
+                line-height: 1.5;
+                color: var(--bs-Dark);
+            }
+
+            .problem div:hover {
+                transform: translateY(-10px);
+                box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            }
+
+            /* Remove previous mobile animations */
+            .problem div {
+                animation: none;
+                animation-play-state: initial;
+            }
+
+            .problem.visible div {
+                animation: none;
+            }
+
+            .problem div:nth-child(2),
+            .problem div:nth-child(3) {
+                animation-delay: 0s;
+            }
+
+            .how-we-solve {
+                flex-direction: column;
+            }
+
+            .how-we-solve .video {
+                max-width: 100%;
+            }
+
+            .available-on {
+                padding: 40px 20px;
+                min-height: 100vh;
+            }
+
+            .devices-title {
+                font-size: 2.5rem;
+                margin-bottom: 40px;
+            }
+
+            .devices-grid {
+                grid-template-columns: 1fr; /* Stack devices vertically on mobile */
+                gap: 30px;
+                padding: 0 20px;
+            }
+
+            .device-card {
+                padding: 30px;
+            }
+
+            .device-card img {
+                width: 80%; /* Adjust image size for mobile */
+            }
+
+            .device-card h3 {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            .device-carousel {
+                width: 250px;
+                height: 250px;
+                perspective: 800px;
+            }
+
+            .device-carousel img {
+                width: 150px;
+                height: 150px;
+            }
+
+            .device-carousel img:nth-child(1) { transform: translate(-50%, -50%) rotateY(0deg) translateZ(200px); }
+            .device-carousel img:nth-child(2) { transform: translate(-50%, -50%) rotateY(90deg) translateZ(200px); }
+            .device-carousel img:nth-child(3) { transform: translate(-50%, -50%) rotateY(180deg) translateZ(200px); }
+            .device-carousel img:nth-child(4) { transform: translate(-50%, -50%) rotateY(270deg) translateZ(200px); }
+
+            .navbar {
+                padding: 10px 20px;
+                width: calc(100% - 40px); /* Full width minus padding */
+                left: 0;
+            }
+
+            .navbar ul {
+                display: none;
+                position: fixed; /* Changed from absolute */
+                top: 0; /* Changed from 60px to 50% */
+                left: 50%;
+                transform: translateX(-50%);
+                width: 100%;
+                height: 100vh; /* Full height of the viewport */
+                background: rgba(0, 7, 45, 0.95);
+                flex-direction: column;
+                justify-content: center; /* Center vertically */
+                align-items: center;
+                padding: 20px;
+                margin: 0;
+                z-index: 999;
+                border-radius: 0; /* Remove border-radius */
+            }
+
+            .navbar ul.active {
+                display: flex;
+            }
+
+            .navbar ul li {
+                margin: 15px 0;
+            }
+
+            .navbar ul li a {
+                font-size: 1.2rem; /* Larger text for better touch targets */
+            }
+
+            .navbar .logo {
+                height: 35px; /* Slightly smaller logo on mobile */
+            }
+
+            .navbar .social-media img {
+                height: 25px; /* Slightly smaller social icons on mobile */
+            }
+
+            .menu-toggle {
+                display: block;
+                font-size: 24px;
+                color: var(--bs-White);
+                cursor: pointer;
+                padding: 5px;
+                margin-left: 15px;
+            }
+
+            .close-menu {
+                display: none;
+                font-size: 24px;
+                color: var(--bs-White);
+                cursor: pointer;
+                position: absolute;
+                top: 20px;
+                right: 20px;
+            }
+
+            .navbar ul.active + .close-menu {
+                display: block;
+            }
+        }
+
+        /* Touch Device Optimization */
+        @media (hover: none) {
+            .problem div {
+                transform: none !important;
+                transition: box-shadow 0.3s ease;
+            }
+
+            .problem div:active {
+                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            }
+
+            .problem div:active {
+                transform: translateY(-5px);
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+            }
+        }
+
+        /* High-DPI Screens */
+        @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+            .problem img {
+                image-rendering: -webkit-optimize-contrast;
+            }
         }
 
         .how-we-solve {
@@ -282,7 +538,6 @@
 
         .how-we-solve .text {
             flex: 1;
-            color: var(--bs-White);
             font-size: 1.2rem;
             line-height: 1.6;
         }
@@ -330,7 +585,6 @@
             font-size: 3.5rem;
             font-weight: 700;
             margin-bottom: 80px;
-            color: var(--bs-White);
             text-align: center;
         }
 
@@ -345,7 +599,6 @@
 
         .device-card {
             padding: 20px; /* Reduce padding */
-            background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
             border-radius: 20px;
             transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
@@ -358,7 +611,6 @@
 
         .device-card:hover {
             transform: translateY(-10px);
-            background: rgba(255, 255, 255, 0.15);
             box-shadow: 0 30px 60px rgba(0, 0, 0, 0.12);
         }
 
@@ -377,7 +629,6 @@
         }
 
         .device-card h3 {
-            color: var(--bs-White);
             font-size: 1.5rem;
             margin: 0;
             opacity: 0;
@@ -390,23 +641,6 @@
             transform: translateY(0);
         }
 
-        .download-button {
-            margin-top: 60px;
-            padding: 20px 40px;
-            font-size: 1.4rem;
-            background: var(--bs-White);
-            color: var(--bs-Oxford);
-            border-radius: 30px;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .download-button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
-        }
-
         @media (max-width: 768px) {
             .hero video {
                 height: 100vh;
@@ -414,20 +648,57 @@
             }
 
             .problem {
-                padding-left: 20px; /* Adjust padding for mobile */
-                padding-right: 20px;
-                justify-content: flex-start;
-                scroll-padding: 20px; /* Added to improve snap points */
-                gap: 20px; /* Reduce gap for better spacing on mobile */
+                flex-direction: column;
+                align-items: center;
+                gap: 20px;
+                padding: 20px;
             }
 
             .problem div {
-                flex: 0 0 80%; /* Make cards take up 80% of the viewport width on mobile */
-                margin-right: 10px; /* Reduce space between cards */
+                width: 100%;
+                max-width: 100%;
+                margin: 0;
+                opacity: 0.8;
+                transform: scale(0.95);
+                transition: all 0.3s ease;
             }
 
-            .problem div:last-child {
-                margin-right: 20px; /* Ensure last card has right margin */
+            .problem div:hover {
+                opacity: 1;
+                transform: scale(1);
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            }
+
+            .problem img {
+                height: 140px; /* Slightly smaller on mobile */
+            }
+
+            .problem div {
+                animation: slideUp 0.5s ease forwards;
+                animation-play-state: paused;
+            }
+
+            .problem.visible div {
+                animation-play-state: running;
+            }
+
+            .problem div:nth-child(2) {
+                animation-delay: 0.2s;
+            }
+
+            .problem div:nth-child(3) {
+                animation-delay: 0.4s;
+            }
+
+            @keyframes slideUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(20px) scale(0.95);
+                }
+                to {
+                    opacity: 0.8;
+                    transform: translateY(0) scale(0.95);
+                }
             }
 
             .how-we-solve {
@@ -600,7 +871,6 @@
         .updates {
             padding: 80px 20px;
             background: rgba(0, 7, 45, 0.8);
-            color: var(--bs-White);
             text-align: center;
         }
 
@@ -610,7 +880,6 @@
         }
 
         .update-box {
-            background: rgba(255, 255, 255, 0.1);
             border: 1px solid rgba(255, 255, 255, 0.3);
             backdrop-filter: blur(10px);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
@@ -677,8 +946,8 @@
         <div class="close-menu">✖</div>
     </div>
     <div id="hero" class="hero">
-        <video id="hero-video" autoplay muted loop>ero-video">
-            <source src="HEROVIDEO.mov" type="video/mp4">
+        <video id="hero-video" autoplay muted>
+            <source src="HEROVIDEO.webm" type="video/mp4">
         </video>
         <div class="hero-content">
             <h1>Ar-T</h1>
@@ -761,7 +1030,6 @@
         </div>
     </div>
     <footer style="padding: 20px; 
-                   background: rgba(0, 7, 45, 0.9); 
                    color: var(--bs-White); 
                    text-align: center;
                    position: relative;
@@ -781,9 +1049,13 @@
             We are open to suggestions. Email us at 
             <a href="mailto:arteapp.info@gmail.com" 
                style="color: var(--bs-Mint); 
-                      text-decoration: none;">
+                      text-decoration: none;
+                      font-weight: bold;">
                 arteapp.info@gmail.com
             </a>
+        </p>
+        <p style="margin: 10px 0;">
+            While Ar-t can be downloaded on Meta Quest devices, we are not related to META Inc.
         </p>
     </footer>
     <script>
@@ -877,8 +1149,36 @@
         document.addEventListener('DOMContentLoaded', () => {
             const heroVideo = document.getElementById('hero-video');
             heroVideo.addEventListener('ended', () => {
-                heroVideo.pause();
+                // Get the current time (duration) of the video
+                const duration = heroVideo.duration;
+                // Set the current time to slightly before the end
+                // This ensures the last frame is displayed perfectly
+                heroVideo.currentTime = duration - 0.1;
             });
+
+            const problems = document.querySelector('.problem');
+            const problemObserver = new IntersectionObserver(
+                (entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            problems.classList.add('visible');
+                        }
+                    });
+                },
+                { threshold: 0.1 }
+            );
+            problemObserver.observe(problems);
+        });
+
+        // Enhanced touch feedback for problem cards
+        document.querySelectorAll('.problem div').forEach(card => {
+            card.addEventListener('touchstart', function() {
+                this.style.transform = 'scale(0.98)';
+            }, { passive: true });
+            
+            card.addEventListener('touchend', function() {
+                this.style.transform = '';
+            }, { passive: true });
         });
     </script>
 </body>
