@@ -946,8 +946,10 @@
         <div class="close-menu">✖</div>
     </div>
     <div id="hero" class="hero">
-        <video id="hero-video" autoplay muted>
-            <source src="HEROVIDEO.webm" type="video/mp4">
+        <video id="hero-video" autoplay muted playsinline>
+            <source src="HEROVIDEO.webm" type="video/webm; codecs=vp9,vorbis">
+            <source src="HEROVIDEO.mp4" type="video/mp4; codecs=avc1.42E01E,mp4a.40.2">
+            Your browser does not support the video tag.
         </video>
         <div class="hero-content">
             <h1>Ar-T</h1>
@@ -986,8 +988,9 @@
             <p>With our platform, you can explore detailed, high-resolution images of artworks, learn about their history, and even place them in your own space using AR. No more crowded museums or expensive travel—just pure, unfiltered art at your fingertips.</p>
         </div>
         <div class="video">
-            <video autoplay muted loop>
-                <source src="HOWWESOLVETHEM.webm" type="video/mp4">
+            <video autoplay muted loop playsinline>
+                <source src="HOWWESOLVETHEM.webm" type="video/webm; codecs=vp9,vorbis">
+                <source src="HOWWESOLVETHEM.mp4" type="video/mp4; codecs=avc1.42E01E,mp4a.40.2">
                 Your browser does not support the video tag.
             </video>
         </div>
