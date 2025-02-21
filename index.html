@@ -205,18 +205,24 @@
 
         .scroll-down {
             position: absolute;
-            bottom: 20px; /* Adjusted from 40px to 20px */
+            bottom: -25px; /* Changed from 20px to 40px for lower positioning */
             left: 50%;
             transform: translateX(-50%);
-            z-index: 2;
+            z-index: 3; /* Changed from 2 to 3 to appear above video */
+            animation: floatUpDown 2s ease-in-out infinite; /* Added smooth floating animation */
+            cursor: pointer; /* Added to indicate interactivity */
         }
 
         .scroll-down svg {
             width: clamp(30px, 4vw, 40px);
             height: auto;
-            animation: bounce 2s infinite;
-            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
-            opacity: 0.9;
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.5)); /* Enhanced shadow for better visibility */
+            opacity: 0.95; /* Increased from 0.9 for better visibility */
+        }
+
+        @keyframes floatUpDown {
+            0%, 100% { transform: translate(-50%, 0); }
+            50% { transform: translate(-50%, 10px); }
         }
 
         @media (max-width: 768px) {
@@ -225,7 +231,7 @@
             }
 
             .scroll-down {
-                bottom: 20px;
+                bottom: 30px; /* Adjusted for mobile but still keeping it lower */
             }
         }
 
@@ -926,6 +932,160 @@
                 font-size: 0.9rem;
             }
         }
+
+        .device-card {
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(254, 252, 251, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        .device-card:hover {
+            transform: translateY(-10px) rotateX(5deg);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+            background: rgba(254, 252, 251, 0.1);
+        }
+
+        .device-card .image-container {
+            width: 200px;
+            height: 200px;
+            margin-bottom: 20px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+
+        .device-card:hover .image-container {
+            transform: translateZ(20px);
+        }
+
+        .device-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.2));
+        }
+
+        .download-button {
+            background: linear-gradient(45deg, var(--bs-Accent), var(--bs-Blue));
+            color: var(--bs-White);
+            padding: 15px 40px;
+            border-radius: 30px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            margin-top: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .download-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(45deg, var(--bs-Blue), var(--bs-Accent));
+        }
+
+        .download-button::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                rgba(255, 255, 255, 0.2),
+                transparent
+            );
+            transform: rotate(45deg);
+            transition: all 0.3s ease;
+            opacity: 0;
+        }
+
+        .download-button:hover::after {
+            opacity: 1;
+            transform: rotate(45deg) translate(50%, 50%);
+        }
+
+        @media (max-width: 768px) {
+            .device-card .image-container {
+                width: 150px;
+                height: 150px;
+            }
+
+            .download-button {
+                padding: 12px 30px;
+                font-size: 1rem;
+            }
+        }
+
+        .hero-download-button {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--bs-White);
+            padding: 15px 40px;
+            border-radius: 30px;
+            font-size: 1.2rem;
+            font-weight: 500;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            margin-top: 30px;
+            display: inline-block;
+        }
+
+        .hero-download-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            color: var(--bs-White);
+        }
+
+        .hero-download-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.2),
+                transparent
+            );
+            transition: 0.5s;
+        }
+
+        .hero-download-button:hover::before {
+            left: 100%;
+        }
+
+        @media (max-width: 768px) {
+            .hero-download-button {
+                padding: 12px 30px;
+                font-size: 1rem;
+                margin-top: 20px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -954,6 +1114,9 @@
         <div class="hero-content">
             <h1>Ar-T</h1>
             <h2>The Future of Creativity</h2>
+            <a href="https://sidequestvr.com/app/37779/ar-t" class="hero-download-button" target="_blank">
+                Get Started
+            </a>
             <div class="scroll-down">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M12 15.172l4.95-4.95a.75.75 0 011.06 1.06l-5.5 5.5a.75.75 0 01-1.06 0l-5.5-5.5a.75.75 0 011.06-1.06L12 15.172z" />
@@ -999,19 +1162,27 @@
         <h2 class="devices-title">Supported Devices</h2>
         <div class="devices-grid">
             <div class="device-card">
-                <img src="quest 3.webp" alt="Meta Quest 3">
+                <div class="image-container">
+                    <img src="quest 3.webp" alt="Meta Quest 3">
+                </div>
                 <h3>Meta Quest 3</h3>
             </div>
             <div class="device-card">
-                <img src="quest 3s.webp" alt="Meta Quest 3S">
+                <div class="image-container">
+                    <img src="quest 3s.webp" alt="Meta Quest 3S">
+                </div>
                 <h3>Meta Quest 3S</h3>
             </div>
             <div class="device-card">
-                <img src="quest2.webp" alt="Meta Quest 2">
+                <div class="image-container">
+                    <img src="quest2.webp" alt="Meta Quest 2">
+                </div>
                 <h3>Meta Quest 2</h3>
             </div>
             <div class="device-card">
-                <img src="questpro.webp" alt="Meta Quest Pro">
+                <div class="image-container">
+                    <img src="questpro.webp" alt="Meta Quest Pro">
+                </div>
                 <h3>Meta Quest Pro</h3>
             </div>
         </div>
