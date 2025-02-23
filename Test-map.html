@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Art Travel Time Estimator - Ar-T</title>
+    <title>How Far is Art? - Ar-T</title>
     <link rel="icon" type="image/x-icon" href="logo.png">
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <style>
@@ -248,11 +248,34 @@
         function calculateTravelTime(userLat, userLon, artwork) {
             const { lat, lon, museum } = artworks[artwork];
             const distance = getDistance(userLat, userLon, lat, lon);
-            const speed = distance > 500 ? 800 : 100;
-            estimatedTime = distance / speed;  // Store estimated time in hours
-            document.getElementById("output").innerHTML = `Distance: ${distance.toFixed(1)} km<br>To: ${museum}`;
+            
+            // More realistic travel time calculation
+            if (distance < 50) {
+                // Local travel: average city speed 30 km/h
+                estimatedTime = (distance / 30) + 0.5; // Add 30 min for prep
+            } else if (distance < 300) {
+                // Train/Car travel: 120 km/h + 1 hour for preparations
+                estimatedTime = (distance / 120) + 1;
+            } else {
+                // Air travel:
+                // - 2 hours for airport procedures at departure
+                // - Flight time at 800 km/h
+                // - 1 hour for arrival procedures
+                // - 1 hour for local transport
+                estimatedTime = 2 + (distance / 800) + 2;
+            }
+
+            document.getElementById("output").innerHTML = 
+                `Distance: ${distance.toFixed(1)} km<br>To: ${museum}<br>` +
+                `${getTransportMode(distance)}`;
 
             animateFlight(userLat, userLon, lat, lon, artwork);
+        }
+
+        function getTransportMode(distance) {
+            if (distance < 50) return "(By car or public transport)";
+            if (distance < 300) return "(By train or car)";
+            return "(By plane)";
         }
 
         function animateFlight(userLat, userLon, destLat, destLon, artwork) {
@@ -324,9 +347,44 @@
             L.marker([destLat, destLon], { icon: artworkLabel }).addTo(map);
         }
 
+        function animateTime(start, end, element, duration = 2000) {
+            const startTime = performance.now();
+            const startMinutes = start * 60;
+            const endMinutes = end * 60;
+            
+            function update(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                // Easing function for smoother animation
+                const easeProgress = 1 - Math.pow(1 - progress, 3);
+                
+                const currentMinutes = Math.round(startMinutes + (endMinutes - startMinutes) * easeProgress);
+                const hours = Math.floor(currentMinutes / 60);
+                const minutes = currentMinutes % 60;
+                
+                let timeText;
+                if (hours > 0) {
+                    timeText = `${hours}h ${minutes}min`;
+                } else {
+                    timeText = `${minutes}min`;
+                }
+                
+                element.innerHTML = 
+                    `${timeText} to see it in person.<br>Or see it now with Ar-T.`;
+                
+                if (progress < 1) {
+                    requestAnimationFrame(update);
+                }
+            }
+            
+            requestAnimationFrame(update);
+        }
+
         function showTravelTime() {
-            const timeInSeconds = Math.floor(estimatedTime * 3600);
-            document.getElementById("comparison").innerHTML = `It takes about ${estimatedTime.toFixed(2)} hours to reach the artwork.<br>Alternatively, you can download the free app to view it in seconds!`;
+            const comparisonElement = document.getElementById("comparison");
+            // Start from 0 and animate to the estimated time
+            animateTime(0, estimatedTime, comparisonElement);
         }
 
         function getDistance(lat1, lon1, lat2, lon2) {
@@ -344,9 +402,9 @@
 </head>
 <body>
     <div class="container">
-        <h2>Discover How Far You Are From Art</h2>
-        <p class="info-text">Enter your city to see how long it would take to visit your favorite artwork in person.</p>
-        <input type="text" id="city" placeholder="Enter Your City">
+        <h2>Art is Closer Than You Think</h2>
+        <p class="info-text">Type your city to discover the journey.</p>
+        <input type="text" id="city" placeholder="Your City">
         <br>
         <select id="artwork">
             <option>Mona Lisa</option>
@@ -359,11 +417,11 @@
             <option>The Persistence of Memory</option>
         </select>
         <br>
-        <button onclick="getUserLocation()">Calculate Distance</button>
+        <button onclick="getUserLocation()">Show Me</button>
         <div id="output"></div>
         <div id="comparison" class="info-text"></div>
         <div id="map"></div>
-        <p class="footer">Experience art instantly with Ar-T - Download the free app today!</p>
+        <p class="footer">Skip the journey - Get Ar-T App</p>
     </div>
 </body>
 </html>
