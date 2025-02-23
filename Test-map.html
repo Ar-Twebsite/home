@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Art Travel Time Estimator</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+            background-color: #F4F4F4;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        h2 {
+            color: #333;
+            font-size: 24px;
+            margin-top: 20px;
+        }
+
+        .input-container {
+            position: relative;
+            width: 80%;
+            max-width: 300px;
+            margin-top: 15px;
+        }
+
+        input, select, button {
+            padding: 12px;
+            font-size: 16px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            background-color: white;
+            width: 100%;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #output {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 20px;
+            color: #555;
+        }
+
+        #map {
+            height: 500px;
+            width: 90%;
+            margin: 20px auto;
+            border-radius: 12px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transition: opacity 1s;
+        }
+
+        .artwork-label {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 8px 15px;
+            font-size: 18px;
+            border-radius: 12px;
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-weight: bold;
+            color: #007bff;
+        }
+
+        .suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background: white;
+            border: 1px solid #ccc;
+            border-top: none;
+            max-height: 150px;
+            overflow-y: auto;
+            z-index: 1000;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .suggestion-item {
+            padding: 8px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .suggestion-item:hover {
+            background-color: #f0f0f0;
+        }
+
+    </style>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        const artworks = {
+            "Mona Lisa": { lat: 48.8606, lon: 2.3376, museum: "Louvre, Paris, France" },
+            "Starry Night": { lat: 40.7614, lon: -73.9776, museum: "MoMA, New York, USA" },
+            "The Birth of Venus": { lat: 43.7687, lon: 11.2560, museum: "Uffizi Gallery, Florence, Italy" },
+            "The Scream": { lat: 59.9139, lon: 10.7522, museum: "National Gallery, Oslo, Norway" },
+            "Girl with a Pearl Earring": { lat: 52.0809, lon: 4.3165, museum: "Mauritshuis, The Hague, Netherlands" },
+            "The Last Supper": { lat: 45.4654, lon: 9.1876, museum: "Santa Maria delle Grazie, Milan, Italy" },
+            "Guernica": { lat: 40.4075, lon: -3.6947, museum: "Museo Reina Sofía, Madrid, Spain" },
+            "The Persistence of Memory": { lat: 40.7614, lon: -73.9776, museum: "MoMA, New York, USA" }
+        };
+
+        let map, planeMarker, flightPath;
+        let markers = [];
+        let cities = [];
+
+        function initializeMap() {
+            map = L.map('map').setView([20, 0], 2);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap contributors'
+            }).addTo(map);
+        }
+
+        async function getUserLocation() {
+            const city = document.getElementById("city").value;
+            const artwork = document.getElementById("artwork").value;
+            
+            if (!city) {
+                alert("Please enter a city");
+                return;
+            }
+
+            const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${city}&limit=5`);
+            const data = await response.json();
+            if (data.length === 0) {
+                alert("City not found. Please try again.");
+                return;
+            }
+
+            const { lat, lon } = data[0];
+            document.getElementById("map").style.opacity = 1;  // Fade-in the map
+            calculateTravelTime(parseFloat(lat), parseFloat(lon), artwork);
+        }
+
+        function calculateTravelTime(userLat, userLon, artwork) {
+            const { lat, lon, museum } = artworks[artwork];
+            const distance = getDistance(userLat, userLon, lat, lon);
+            const speed = distance > 500 ? 800 : 100;
+            const time = distance / speed;
+            document.getElementById("output").innerHTML = `Distance: ${distance.toFixed(1)} km<br>Estimated Time: ${time.toFixed(2)} hours<br>To: ${museum}`;
+            animateFlight(userLat, userLon, lat, lon, artwork);
+        }
+
+        function animateFlight(userLat, userLon, destLat, destLon, artwork) {
+            if (markers.length) {
+                markers.forEach(marker => map.removeLayer(marker));
+                markers = [];
+            }
+            if (flightPath) map.removeLayer(flightPath);
+            if (planeMarker) map.removeLayer(planeMarker);
+
+            const planeIcon = L.icon({
+                iconUrl: 'https://cdn-icons-png.flaticon.com/512/149/149059.png',
+                iconSize: [40, 40],
+                iconAnchor: [20, 20]
+            });
+            
+            planeMarker = L.marker([userLat, userLon], { icon: planeIcon }).addTo(map);
+            flightPath = L.polyline([[userLat, userLon], [destLat, destLon]], { color: 'blue', dashArray: '5, 10' }).addTo(map);
+            
+            map.setView([userLat, userLon], 6);
+            map.flyTo([userLat, userLon], 6, { duration: 2 });
+
+            let i = 0;
+            const steps = 100;
+            const latStep = (destLat - userLat) / steps;
+            const lonStep = (destLon - userLon) / steps;
+            
+            function movePlane() {
+                if (i < steps) {
+                    const newLat = userLat + latStep * i;
+                    const newLon = userLon + lonStep * i;
+                    planeMarker.setLatLng([newLat, newLon]);
+                    map.setView([newLat, newLon], 4);
+                    i++;
+                    setTimeout(movePlane, 30);
+                } else {
+                    planeMarker.setLatLng([destLat, destLon]);
+                    map.setView([destLat, destLon], 12);
+                }
+            }
+            setTimeout(() => movePlane(), 2000);
+            
+            const artworkLabel = L.divIcon({
+                className: 'artwork-label',
+                html: artwork,
+                iconSize: [getTextWidth(artwork) + 30, 40]
+            });
+            L.marker([destLat, destLon], { icon: artworkLabel }).addTo(map);
+        }
+
+        function getDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371;
+            const toRad = (deg) => deg * (Math.PI / 180);
+            const dLat = toRad(lat2 - lat1);
+            const dLon = toRad(lon2 - lon1);
+            const a = Math.sin(dLat / 2) ** 2 + Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) ** 2;
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            return R * c;
+        }
+
+        function getTextWidth(text) {
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+            context.font = '18px -apple-system, BlinkMacSystemFont, Segoe UI';
+            return context.measureText(text).width;
+        }
+
+        async function fetchCitySuggestions(query) {
+            const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${query}&limit=5`);
+            const data = await response.json();
+            return data.map(city => city.display_name);
+        }
+
+        function showCitySuggestions() {
+            const query = document.getElementById("city").value;
+            const suggestionsContainer = document.getElementById("city-suggestions");
+
+            if (query.length > 2) {
+                fetchCitySuggestions(query).then(suggestions => {
+                    suggestionsContainer.innerHTML = '';
+                    suggestions.forEach(suggestion => {
+                        const item = document.createElement('div');
+                        item.textContent = suggestion;
+                        item.classList.add('suggestion-item');
+                        item.onclick = () => {
+                            document.getElementById("city").value = suggestion;
+                            suggestionsContainer.innerHTML = '';
+                        };
+                        suggestionsContainer.appendChild(item);
+                    });
+                });
+            } else {
+                suggestionsContainer.innerHTML = '';
+            }
+        }
+
+        window.onload = initializeMap;
+    </script>
+</head>
+<body>
+    <h2>Art Travel Time Estimator</h2>
+    <div class="input-container">
+        <input type="text" id="city" oninput="showCitySuggestions()" placeholder="Enter your city...">
+        <div id="city-suggestions" class="suggestions"></div>
+    </div>
+    <div class="input-container">
+        <select id="artwork">
+            <option>Mona Lisa</option>
+            <option>Starry Night</option>
+            <option>The Birth of Venus</option>
+            <option>The Scream</option>
+            <option>Girl with a Pearl Earring</option>
+            <option>The Last Supper</option>
+            <option>Guernica</option>
+            <option>The Persistence of Memory</option>
+        </select>
+    </div>
+    <div class="input-container">
+        <button onclick="getUserLocation()">Estimate Travel Time</button>
+    </div>
+    <div id="output"></div>
+    <div id="map"></div>
+</body>
+</html>
